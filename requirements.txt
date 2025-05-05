@@ -1,0 +1,6 @@
+Flask
+Flask-Dance
+requests
+beautifulsoup4
+openai
+python-dotenv

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Plan Your Trip | TravelBuddy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-image: url("{{ url_for('static', filename='images/bg_dashboard.jpg') }}");
+      background-size: cover;
+      background-position: center;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body class="text-white bg-black/60 backdrop-blur-md px-4 py-10">
+
+  <div class="max-w-4xl mx-auto space-y-10">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="h-10 w-10 rounded-full shadow">
+        <h1 class="text-3xl font-bold">Trip Planner</h1>
+      </div>
+      <a href="/dashboard" class="text-sm bg-yellow-400 hover:bg-yellow-500 px-4 py-1 rounded font-medium text-black">Back to Dashboard</a>
+    </div>
+
+    <!-- Form -->
+    <form method="POST" class="bg-white/10 backdrop-blur-lg p-6 rounded-xl shadow-lg space-y-4">
+      <div>
+        <label class="block font-semibold mb-1">Destination</label>
+        <input type="text" name="destination" placeholder="e.g. Goa, Paris" required
+               class="w-full px-4 py-2 rounded-md bg-white/20 text-white placeholder-gray-300 focus:outline-none">
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1">Number of Days</label>
+        <input type="number" name="days" min="1" max="30" placeholder="e.g. 5" required
+               class="w-full px-4 py-2 rounded-md bg-white/20 text-white placeholder-gray-300 focus:outline-none">
+      </div>
+
+      <div>
+        <label class="block font-semibold mb-1">Interests</label>
+        <input type="text" name="interests" placeholder="e.g. Beaches, Food, Culture" required
+               class="w-full px-4 py-2 rounded-md bg-white/20 text-white placeholder-gray-300 focus:outline-none">
+      </div>
+
+      <button type="submit"
+              class="w-full bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-md font-semibold text-white shadow-lg transition duration-300">
+        Generate My Trip Plan
+      </button>
+    </form>
+
+    <!-- AI Output -->
+    {% if itinerary %}
+    <div class="bg-white/10 backdrop-blur-lg p-6 rounded-xl shadow-xl space-y-4">
+      <h2 class="text-xl font-semibold text-emerald-300">Your AI-Generated Trip Itinerary</h2>
+      <pre class="whitespace-pre-wrap text-gray-200">{{ itinerary }}</pre>
+
+      <form method="POST" action="/download_plan">
+        <input type="hidden" name="itinerary" value="{{ itinerary }}">
+        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded shadow-md">
+          Download as PDF
+        </button>
+      </form>
+    </div>
+    {% endif %}
+
+  </div>
+</body>
+</html>

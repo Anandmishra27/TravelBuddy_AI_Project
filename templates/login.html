@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | TravelBuddy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Optional: Add a subtle animation for the login box */
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200">
+  <div class="bg-white p-8 rounded-xl shadow-xl w-full max-w-md fade-in">
+    <div class="flex justify-center mb-6">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="h-16">
+    </div>
+    <h2 class="text-2xl font-bold text-center mb-4">Welcome to TravelBuddy</h2>
+    <p class="text-center text-gray-600 mb-6">Sign in with Google to continue</p>
+    <div class="text-center">
+      <a href="{{ url_for('google.login') }}" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105">
+        Sign in with Google
+      </a>
+    </div>
+    <p class="text-center text-gray-600 mt-4">
+      Don't have an account? <a href="/register" class="text-blue-600 hover:underline">Register here</a>
+    </p>
+    <p class="text-center text-gray-600 mt-2">
+      <a href="/forgot-password" class="text-blue-600 hover:underline">Forgot Password?</a>
+    </p>
+  </div>
+</body>
+</html>

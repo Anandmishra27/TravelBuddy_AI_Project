@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TravelBuddy Dashboard - Your personal travel assistant" />
+  <meta name="keywords" content="travel, tips, AI, planning" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <title>TravelBuddy Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-cover bg-center min-h-screen" style="background-image: url('/static/images/bg_dashboard.jpg');">
+  <div class="min-h-screen bg-white bg-opacity-80 backdrop-blur-sm p-6 flex flex-col items-center">
+    <div class="w-full max-w-4xl p-6 bg-white bg-opacity-90 rounded-xl shadow-xl">
+      <header class="flex justify-between items-center mb-4">
+        <h1 class="text-3xl font-bold text-indigo-700">Welcome, {{ user.name }}</h1>
+        <a href="/logout" class="text-red-500 hover:underline">Logout</a>
+      </header>
+
+      <!-- Notification Banner -->
+      <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+        <p class="font-bold">Important Update!</p>
+        <p>Check out the latest travel tips and facts to enhance your journey.</p>
+      </div>
+
+      <main class="grid md:grid-cols-2 gap-6">
+        <section class="bg-indigo-50 p-5 rounded-xl shadow-lg transition-transform transform hover:scale-105">
+          <h2 class="text-xl font-semibold mb-2 text-indigo-700 flex items-center">
+            <i class="fas fa-lightbulb mr-2"></i> Smart Travel Tips
+          </h2>
+          <ul class="list-disc pl-5 text-gray-700 space-y-1">
+            {% for tip in travel_tips %}
+              <li>{{ tip }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+
+        <section class="bg-white p-5 rounded-xl shadow-lg transition-transform transform hover:scale-105">
+          <h2 class="text-xl font-semibold mb-2 text-indigo-700 flex items-center">
+            <i class="fas fa-info-circle mr-2"></i> AI Travel Facts
+          </h2>
+          <ul class="list-disc pl-5 text-gray-700 space-y-1">
+            {% for fact in travel_facts %}
+              <li>{{ fact }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+      </main>
+
+      <footer class="mt-6 flex justify-between">
+        <a href="/chat" class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 flex items-center">
+          <i class="fas fa-comments mr-2"></i> Ask the AI Assistant
+        </a>
+        <a href="/plan" class="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-3 rounded-lg shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 flex items-center">
+          <i class="fas fa-plane-departure mr-2"></i> Plan Your Trip
+        </a>
+      </footer>
+
+      <div class="mt-4 text-center text-gray-600">
+        <p>&copy; 2025 TravelBuddy. All rights reserved.</p>
+        <p>Follow us on <a href="#" class="text-indigo-600 hover:underline">Social Media</a></p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
