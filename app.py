@@ -5,11 +5,11 @@ import os
 import pdfkit
 import google.generativeai as genai
 
-# Load .env
+# Load environment variables
 load_dotenv()
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
-# Flask config
+# Flask setup
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "defaultkey")
 app.config["SESSION_COOKIE_NAME"] = "travelbuddy_session"
@@ -27,25 +27,24 @@ google_bp = make_google_blueprint(
 )
 app.register_blueprint(google_bp, url_prefix="/login")
 
-# Gemini setup
+# Gemini AI configuration
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("models/gemini-1.5-pro")
 
 # Travel facts generator
 def generate_ai_facts():
     try:
-        prompt = "Give 5 fun and short travel facts. Keep them within 25 words each."
+        prompt = "Give 5 fun and short travel facts. Keep each under 25 words."
         response = model.generate_content(prompt)
-        return response.text.split("\n") if response and response.text else []
+        return response.text.strip().split("\n") if response and response.text else []
     except:
-        return ["Traveling opens the mind more than any book ever could."]
+        return ["Travel opens the mind more than any book ever could."]
 
-# Home route
+# Routes
 @app.route("/")
 def home():
     return redirect(url_for("dashboard"))
 
-# Dashboard
 @app.route("/dashboard")
 def dashboard():
     if not google.authorized:
@@ -64,7 +63,6 @@ def dashboard():
     ]
     return render_template("dashboard.html", user=session["user"], travel_facts=travel_facts, travel_tips=travel_tips)
 
-# AI Assistant Chat
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
     if not google.authorized:
@@ -74,26 +72,20 @@ def chat():
         resp = google.get("/oauth2/v2/userinfo")
         session["user"] = resp.json()
 
-    if "chat_history" not in session:
-        session["chat_history"] = []
-
     ai_response = None
     if request.method == "POST":
         user_input = request.form.get("message")
         if user_input:
             try:
-                convo = model.start_chat(history=session["chat_history"])
+                convo = model.start_chat(history=[])
                 reply = convo.send_message(user_input)
                 ai_response = reply.text.strip()
-                session["chat_history"].append({"role": "user", "content": user_input})
-                session["chat_history"].append({"role": "assistant", "content": ai_response})
             except Exception as e:
                 print("AI Chat Error:", e)
                 ai_response = "AI is currently unavailable. Please try again."
 
     return render_template("chat.html", user=session["user"], response=ai_response)
 
-# Trip Planner
 @app.route("/plan", methods=["GET", "POST"])
 def plan():
     if not google.authorized:
@@ -119,13 +111,12 @@ def plan():
                 itinerary = response.text.strip()
             except Exception as e:
                 print("Planner Error:", e)
-                itinerary = "Sorry, I couldn't generate the itinerary. Please try again."
+                itinerary = "Could not generate your itinerary. Please try again."
         else:
-            itinerary = "Please fill all the fields to get your travel plan."
+            itinerary = "Please fill all the fields."
 
     return render_template("plan.html", user=session["user"], itinerary=itinerary)
 
-# PDF Download
 @app.route("/download_plan", methods=["POST"])
 def download_plan():
     if "itinerary" not in request.form:
@@ -140,12 +131,10 @@ def download_plan():
     response.headers["Content-Disposition"] = "attachment; filename=trip_plan.pdf"
     return response
 
-# Logout
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("home"))
 
-# Run app
 if __name__ == "__main__":
     app.run(debug=True)
