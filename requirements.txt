@@ -5,3 +5,4 @@ beautifulsoup4
 openai
 python-dotenv
 gunicorn
+pdfkit
